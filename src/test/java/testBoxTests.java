@@ -1,11 +1,19 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.Selenide;
+import com.codeborne.selenide.SelenideDriver;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+
+
+import java.awt.*;
 
 import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.open;
+import static com.codeborne.selenide.Selenide.*;
 
 public class testBoxTests {
     @BeforeAll
@@ -15,6 +23,7 @@ public class testBoxTests {
         Configuration.browserSize = "1440x900";
         Configuration.baseUrl = "https://demoqa.com";
     }
+
     @Test
     void FillFormTest() {
         String userName = "Ivan Ivanov";
@@ -23,10 +32,15 @@ public class testBoxTests {
         String permanentAddress = "city of Moscow 2";
 
         open("/text-box");
+        Selenide.executeJavaScript("document.body.style.zoom='100%'");
+        Selenide.executeJavaScript("$('#fixedban').remove()");
+        Selenide.executeJavaScript("$('footer').remove()");
+
         $("#userName").setValue(userName);
         $("#userEmail").setValue(userEmail);
         $("#currentAddress").setValue(currentAddress);
         $("#permanentAddress").setValue(permanentAddress);
+        $("#submit").shouldBe(Condition.visible);
         $("#submit").click();
 
         $("#output").shouldBe(Condition.visible);
